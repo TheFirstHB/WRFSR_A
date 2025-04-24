@@ -25,12 +25,6 @@ from torch import nn
 import math
 from tqdm import tqdm
 
-configuration = CLIPVisionConfig(
-    projection_dim = 512,
-    num_channels = 1,
-    image_size = 64
-)
-
 class DateTimeEmbeddingWithPeriodicity(nn.Module):
     def __init__(self, embedding_dim=256):
         super(DateTimeEmbeddingWithPeriodicity, self).__init__()
@@ -71,9 +65,9 @@ class DateTimeEmbeddingWithPeriodicity(nn.Module):
         return self.fc(embedding)
 
 class DenoisingModel(nn.Module):
-    def __init__(self):
+    def __init__(self,config):
         super(DenoisingModel, self).__init__()
-        self.lr_encoder = CLIPVisionModelWithProjection(configuration)
+        self.lr_encoder = CLIPVisionModelWithProjection(config.clipconf)
         self.unet = UNet2DConditionModel(
                         sample_size=config.image_size,  # the target image resolution
                         #入出力サイズ
